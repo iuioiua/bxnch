@@ -1,7 +1,7 @@
 {
   "lock": false,
   "tasks": {
-    "dev": "deno run --watch --allow-net mod.ts",
+    "dev": "deno run --watch --allow-net server.ts",
     "bench:gen": "deno bench --json > bench.json",
     "ok": "deno fmt --check && deno lint && deno check **/*.ts"
   },
