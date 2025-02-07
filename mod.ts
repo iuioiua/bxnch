@@ -1,19 +1,16 @@
 // deno-lint-ignore-file no-explicit-any
 import { renderChart } from "fresh_charts/render.ts";
 import { ChartColors } from "fresh_charts/utils.ts";
-import { Status } from "std/http/http_status.ts";
+import { STATUS_CODE, STATUS_TEXT } from "@std/http/status";
 
-export function toRawFileUrl(url: URL) {
-  return url.toString().replace(
-    url.origin,
-    "https://raw.githubusercontent.com",
-  );
-}
-
-export async function handler(request: Request) {
+Deno.serve(async (request) => {
   if (request.method !== "GET") {
     await request.body?.cancel();
-    return new Response(null, { status: Status.NotFound });
+    const statusText = STATUS_TEXT[STATUS_CODE.NotFound];
+    return new Response(statusText, {
+      status: STATUS_CODE.NotFound,
+      statusText,
+    });
   }
 
   const url = new URL(request.url);
@@ -22,11 +19,19 @@ export async function handler(request: Request) {
   }
 
   if (url.pathname === "/favicon.ico") {
-    return new Response(null, { status: Status.NotFound });
+    const statusText = STATUS_TEXT[STATUS_CODE.NotFound];
+    return new Response(statusText, {
+      status: STATUS_CODE.NotFound,
+      statusText,
+    });
   }
 
   const isDark = url.searchParams.get("dark") !== null;
-  const response = await fetch(toRawFileUrl(url));
+  const rawFileUrl = url.toString().replace(
+    url.origin,
+    "https://raw.githubusercontent.com",
+  );
+  const response = await fetch(rawFileUrl);
 
   if (!response.ok) {
     return new Response(response.body, { ...response, headers: {} });
@@ -34,7 +39,7 @@ export async function handler(request: Request) {
 
   const bench = await response.json();
 
-  return await renderChart({
+  return renderChart({
     width: Number(url.searchParams.get("width") ?? "768"),
     height: Number(url.searchParams.get("height") ?? "384"),
     data: {
@@ -78,8 +83,4 @@ export async function handler(request: Request) {
       },
     },
   });
-}
-
-if (import.meta.main) {
-  Deno.serve(handler);
-}
+});

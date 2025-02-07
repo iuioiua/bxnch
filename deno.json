@@ -6,7 +6,7 @@
     "ok": "deno fmt --check && deno lint && deno check **/*.ts"
   },
   "imports": {
-    "fresh_charts/": "https://deno.land/x/fresh_charts@0.3.1/",
-    "std/": "https://deno.land/std@0.198.0/"
+    "@std/http": "jsr:@std/http@^1.0.13",
+    "fresh_charts/": "https://deno.land/x/fresh_charts@0.3.1/"
   }
 }

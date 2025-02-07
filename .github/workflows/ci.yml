@@ -13,16 +13,16 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-22.04
-          - windows-2022
-          - macOS-12
+          - ubuntu-latest
+          - windows-latest
+          - macOS-latest
 
     steps:
       - name: Setup repo
         uses: actions/checkout@v4
 
       - name: Setup Deno
-        uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@v2
 
       - name: Check formatting, linting and types
         run: deno task ok
