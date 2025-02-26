@@ -4,8 +4,9 @@ import { ChartColors } from "fresh_charts/utils.ts";
 import { STATUS_CODE, STATUS_TEXT } from "@std/http/status";
 
 Deno.serve(async (request) => {
+  await request.body?.cancel();
+
   if (request.method !== "GET") {
-    await request.body?.cancel();
     const statusText = STATUS_TEXT[STATUS_CODE.NotFound];
     return new Response(statusText, {
       status: STATUS_CODE.NotFound,
