@@ -1,11 +1,9 @@
 // deno-lint-ignore-file no-explicit-any
 import { renderChart } from "fresh_charts/render.ts";
-import { ChartColors } from "fresh_charts/utils.ts";
 import { STATUS_CODE, STATUS_TEXT } from "@std/http/status";
 
 Deno.serve(async (request) => {
   if (request.method !== "GET") {
-    await request.body?.cancel();
     const statusText = STATUS_TEXT[STATUS_CODE.NotFound];
     return new Response(statusText, {
       status: STATUS_CODE.NotFound,
@@ -47,10 +45,18 @@ Deno.serve(async (request) => {
       datasets: [{
         label: "Performance (avg. ns/iter)",
         data: bench.benches.map(({ results }: any) => results[0].ok.avg),
-        backgroundColor: url.searchParams.get("color") ?? ChartColors.Green,
+        backgroundColor: url.searchParams.get("color") ?? "lightblue",
       }],
     },
     options: {
+      plugins: {
+        title: {
+          display: true,
+          text: `${bench.runtime} / ${bench.cpu}`,
+          fullSize: false,
+          color: isDark ? "white" : undefined,
+        },
+      },
       color: isDark ? "white" : undefined,
       scales: {
         y: {
