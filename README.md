@@ -1,7 +1,8 @@
 # bxnch
 
-Service that serves benchmark graphs from Deno benchmark JSON files. Pronounced
-"bench".
+Service that serves benchmark graphs from
+[Deno benchmark JSON files](https://docs.deno.com/runtime/reference/cli/bench/#json-output).
+Pronounced "bench".
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://bxnch.deno.dev/iuioiua/bxnch/main/bench.json?dark">
