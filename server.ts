@@ -1,7 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { renderChart } from "fresh_charts/render.ts";
-import { ChartColors } from "fresh_charts/utils.ts";
 import { STATUS_CODE, STATUS_TEXT } from "@std/http/status";
+import { chart } from "fresh_charts/core.ts";
 
 Deno.serve(async (request) => {
   await request.body?.cancel();
@@ -40,7 +39,7 @@ Deno.serve(async (request) => {
 
   const bench = await response.json();
 
-  return renderChart({
+  let svg = chart({
     width: Number(url.searchParams.get("width") ?? "768"),
     height: Number(url.searchParams.get("height") ?? "384"),
     data: {
@@ -48,10 +47,20 @@ Deno.serve(async (request) => {
       datasets: [{
         label: "Performance (avg. ns/iter)",
         data: bench.benches.map(({ results }: any) => results[0].ok.avg),
-        backgroundColor: url.searchParams.get("color") ?? ChartColors.Green,
+        backgroundColor: url.searchParams.get("color") ?? "lightblue",
       }],
     },
     options: {
+      plugins: {
+        subtitle: {
+          display: true,
+          text: `${bench.runtime} / ${bench.cpu}`,
+          color: isDark ? "white" : undefined,
+        },
+        legend: {
+          display: false,
+        },
+      },
       color: isDark ? "white" : undefined,
       scales: {
         y: {
@@ -83,5 +92,12 @@ Deno.serve(async (request) => {
         },
       },
     },
+  });
+
+  // Workaround to prevent title and subtitle from being stretched
+  svg = svg.replace(/\s*textLength\s*=\s*"[^"]*"/g, "");
+
+  return new Response(svg, {
+    headers: { "content-type": "image/svg+xml" },
   });
 });
