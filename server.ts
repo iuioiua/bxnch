@@ -3,6 +3,8 @@ import { renderChart } from "fresh_charts/render.ts";
 import { STATUS_CODE, STATUS_TEXT } from "@std/http/status";
 
 Deno.serve(async (request) => {
+  await request.body?.cancel();
+
   if (request.method !== "GET") {
     const statusText = STATUS_TEXT[STATUS_CODE.NotFound];
     return new Response(statusText, {
