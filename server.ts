@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { renderChart } from "fresh_charts/render.ts";
 import { STATUS_CODE, STATUS_TEXT } from "@std/http/status";
+import { chart } from "fresh_charts/core.ts";
 
 Deno.serve(async (request) => {
   await request.body?.cancel();
@@ -39,7 +39,7 @@ Deno.serve(async (request) => {
 
   const bench = await response.json();
 
-  return renderChart({
+  let svg = chart({
     width: Number(url.searchParams.get("width") ?? "768"),
     height: Number(url.searchParams.get("height") ?? "384"),
     data: {
@@ -52,11 +52,13 @@ Deno.serve(async (request) => {
     },
     options: {
       plugins: {
-        title: {
+        subtitle: {
           display: true,
           text: `${bench.runtime} / ${bench.cpu}`,
-          fullSize: false,
           color: isDark ? "white" : undefined,
+        },
+        legend: {
+          display: false,
         },
       },
       color: isDark ? "white" : undefined,
@@ -90,5 +92,12 @@ Deno.serve(async (request) => {
         },
       },
     },
+  });
+
+  // Workaround to prevent title and subtitle from being stretched
+  svg = svg.replace(/\s*textLength\s*=\s*"[^"]*"/g, "");
+
+  return new Response(svg, {
+    headers: { "content-type": "image/svg+xml" },
   });
 });
