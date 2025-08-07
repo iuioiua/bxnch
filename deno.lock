@@ -1,0 +1,11 @@
+{
+  "version": "5",
+  "remote": {
+    "https://deno.land/x/fresh_charts@0.3.1/core.ts": "16890d5ecf98a4c668a7052dfdd64994c0fe38f5b80c9654a6f6073798e6f783",
+    "https://deno.land/x/fresh_charts@0.3.1/deps.ts": "954b239be312a2b29a75da5c21f9e1ba5c16b53d687e10c64b8292feee798b8c",
+    "https://deno.land/x/fresh_charts@0.3.1/deps_server.ts": "73715afde9ed29a0adf9eef8253c9e581b0e1b61254d42379764d28f8cb63625",
+    "https://esm.sh/stable/@kurkle/color@0.3.1": "24c2eea0dfe8583a93af249524d9871e0d54f20502604b11f8b369e673d0bc65",
+    "https://esm.sh/stable/chart.js@4.3.0/auto?target=es2022": "b263bdd43498d59b9513baf9ff0c32c106e1184d551d8816f0b9234eb2971e2f",
+    "https://esm.sh/stable/red-agate-svg-canvas@0.5.0": "0bc95162ac45d909865136aea5ec7da5efca1c86eee50ebd73d84e36ae2882a9"
+  }
+}

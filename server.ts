@@ -1,17 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
-import { STATUS_CODE, STATUS_TEXT } from "@std/http/status";
 import { chart } from "fresh_charts/core.ts";
 
-Deno.serve(async (request) => {
+async function handler(request: Request): Promise<Response> {
   await request.body?.cancel();
-
-  if (request.method !== "GET") {
-    const statusText = STATUS_TEXT[STATUS_CODE.NotFound];
-    return new Response(statusText, {
-      status: STATUS_CODE.NotFound,
-      statusText,
-    });
-  }
 
   const url = new URL(request.url);
   if (url.pathname === "/") {
@@ -19,11 +10,11 @@ Deno.serve(async (request) => {
   }
 
   if (url.pathname === "/favicon.ico") {
-    const statusText = STATUS_TEXT[STATUS_CODE.NotFound];
-    return new Response(statusText, {
-      status: STATUS_CODE.NotFound,
-      statusText,
-    });
+    return new Response("Not Found", { status: 404 });
+  }
+
+  if (request.method !== "GET") {
+    return new Response("Not Found", { status: 405 });
   }
 
   const isDark = url.searchParams.get("dark") !== null;
@@ -100,4 +91,8 @@ Deno.serve(async (request) => {
   return new Response(svg, {
     headers: { "content-type": "image/svg+xml" },
   });
-});
+}
+
+export default {
+  fetch: handler,
+} as Deno.ServeDefaultExport;

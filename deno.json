@@ -1,12 +1,10 @@
 {
-  "lock": false,
   "tasks": {
-    "dev": "deno run --watch --allow-net server.ts",
+    "dev": "deno serve --watch server.ts",
     "bench:gen": "deno bench --json > bench.json",
     "ok": "deno fmt --check && deno lint && deno check **/*.ts"
   },
   "imports": {
-    "@std/http": "jsr:@std/http@^1.0.13",
     "fresh_charts/": "https://deno.land/x/fresh_charts@0.3.1/"
   }
 }
